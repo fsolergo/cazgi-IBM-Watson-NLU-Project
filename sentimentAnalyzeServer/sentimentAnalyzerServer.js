@@ -30,20 +30,89 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
-
-    return res.send({"happy":"90","sad":"10"});
+    let instance = getNLUInstance();
+    const analyzeParams = {
+        'url': req.query.url,
+        'features': {
+            'entities': {
+                'emotion': true,
+                'limit': 1,
+            },
+        },
+    };
+    instance.analyze(analyzeParams)
+        .then(analysisResults => {
+            let resp = JSON.parse(JSON.stringify(analysisResults));
+            return res.send(resp.result.entities[0].emotion);
+        })
+        .catch(err => {
+            console.log('error:', err);
+        });
+    
 });
 
 app.get("/url/sentiment", (req,res) => {
-    return res.send("url sentiment for "+req.query.url);
+    let instance = getNLUInstance();
+    const analyzeParams = {
+        'url': req.query.url,
+        'features': {
+            'entities': {
+                'sentiment': true,
+                'limit': 1,
+            },
+        },
+    };
+    instance.analyze(analyzeParams)
+        .then(analysisResults => {
+            let resp = JSON.parse(JSON.stringify(analysisResults));
+            return res.send(resp.result.entities[0].sentiment);
+        })
+        .catch(err => {
+            console.log('error:', err);
+        });
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"happy":"10","sad":"90"});
+    let instance = getNLUInstance();
+    const analyzeParams = {
+        'text':req.query.text,
+        'features': {
+            'entities': {
+                'emotion': true,
+                'limit': 1,
+            },
+        },
+        
+    };
+    instance.analyze(analyzeParams)
+        .then(analysisResults => {
+            let resp = JSON.parse(JSON.stringify(analysisResults));
+            return res.send(resp.result.entities[0].emotion);
+        })
+        .catch(err => {
+            console.log('error:', err);
+        });
 });
 
 app.get("/text/sentiment", (req,res) => {
-    return res.send("text sentiment for "+req.query.text);
+    let instance = getNLUInstance();
+    const analyzeParams = {
+        'text':req.query.text,
+        'features': {
+            'entities': {
+                'sentiment': true,
+                'limit': 1,
+            },
+        },
+    };
+    instance.analyze(analyzeParams)
+        .then(analysisResults => {
+            let resp = JSON.parse(JSON.stringify(analysisResults));
+            return res.send(resp.result.entities[0].sentiment);
+        })
+        .catch(err => {
+            console.log('error:', err);
+        });
 });
 
 let server = app.listen(8080, () => {
