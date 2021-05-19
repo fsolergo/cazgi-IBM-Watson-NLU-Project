@@ -34,16 +34,14 @@ app.get("/url/emotion", (req,res) => {
     const analyzeParams = {
         'url': req.query.url,
         'features': {
-            'entities': {
-                'emotion': true,
-                'limit': 1,
-            },
+            'emotion': {}
         },
     };
     instance.analyze(analyzeParams)
         .then(analysisResults => {
             let resp = JSON.parse(JSON.stringify(analysisResults));
-            return res.send(resp.result.entities[0].emotion);
+            console.log(JSON.stringify(analysisResults));
+            return res.send(resp.result.emotion.document.emotion);
         })
         .catch(err => {
             console.log('error:', err);
@@ -56,16 +54,14 @@ app.get("/url/sentiment", (req,res) => {
     const analyzeParams = {
         'url': req.query.url,
         'features': {
-            'entities': {
-                'sentiment': true,
-                'limit': 1,
-            },
-        },
+            'sentiment': {
+            }
+        }
     };
     instance.analyze(analyzeParams)
         .then(analysisResults => {
             let resp = JSON.parse(JSON.stringify(analysisResults));
-            return res.send(resp.result.entities[0].sentiment);
+            return res.send(resp.result.sentiment.document);
         })
         .catch(err => {
             console.log('error:', err);
@@ -77,17 +73,14 @@ app.get("/text/emotion", (req,res) => {
     const analyzeParams = {
         'text':req.query.text,
         'features': {
-            'entities': {
-                'emotion': true,
-                'limit': 1,
-            },
+            'emotion': {}
         },
         
     };
     instance.analyze(analyzeParams)
         .then(analysisResults => {
             let resp = JSON.parse(JSON.stringify(analysisResults));
-            return res.send(resp.result.entities[0].emotion);
+            return res.send(resp.result.emotion.document.emotion);
         })
         .catch(err => {
             console.log('error:', err);
@@ -99,16 +92,15 @@ app.get("/text/sentiment", (req,res) => {
     const analyzeParams = {
         'text':req.query.text,
         'features': {
-            'entities': {
-                'sentiment': true,
-                'limit': 1,
-            },
-        },
+            'sentiment': {
+            }
+        }
     };
     instance.analyze(analyzeParams)
         .then(analysisResults => {
+            console.log(analysisResults);
             let resp = JSON.parse(JSON.stringify(analysisResults));
-            return res.send(resp.result.entities[0].sentiment);
+            return res.send(resp.result.sentiment.document);
         })
         .catch(err => {
             console.log('error:', err);
